@@ -1,54 +1,36 @@
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
+const path = require('path'); // <--- Añadimos esto
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(require('cors')());
 
-// Sirve los archivos estáticos (HTML, CSS, JS del front)
-app.use(express.static(path.join(__dirname, '../')));
-
-// Ruta para las reseñas
-app.post('/api/reviews', (req, res) => {
-    const nuevaReseña = req.body;
-    const filePath = path.join(__dirname, 'reseñas.json');
-
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        let reseñas = [];
-        
-        if (!err && data && data.trim().length > 0) {
-            try {
-                reseñas = JSON.parse(data);
-            } catch (e) {
-                reseñas = [];
-            }
-        }
-        
-        reseñas.push({
-            sabor: nuevaReseña.sabor,
-            texto: nuevaReseña.texto,
-            fecha: new Date().toLocaleString()
-        });
-
-        fs.writeFile(filePath, JSON.stringify(reseñas, null, 2), (err) => {
-            if (err) return res.status(500).send("Error interno");
-            console.log("¡Reseña guardada con éxito!");
-            res.send("Reseña guardada");
-        });
-    });
-});
-const path = require('path');
-
-// Esto le dice al servidor que sirva el archivo Index.html que está una carpeta más atrás
+// --- EL ARREGLO ESTÁ AQUÍ ---
+// Servir los archivos que están fuera de la carpeta backend (Index.html, etc.)
 app.use(express.static(path.join(__dirname, '..')));
 
-app.get('*', (req, res) => {
+// Cuando alguien entre a la raíz, enviarle el Index.html
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Index.html'));
 });
+// ----------------------------
 
-// PUERTO DINÁMICO: Esto es obligatorio para que funcione en GitHub/Render/Railway
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor activo en el puerto ${PORT}`);
+const reseñasFile = path.join(__dirname, 'reseñas.json');
+
+app.get('/api/resenas', (req, res) => {
+    if (!fs.existsSync(reseñasFile)) return res.json([]);
+    const data = fs.readFileSync(reseñasFile);
+    res.json(JSON.parse(data));
+});
+
+app.post('/api/resenas', (req, res) => {
+    const nuevasReseñas = req.body;
+    fs.writeFileSync(reseñasFile, JSON.stringify(nuevasReseñas, null, 2));
+    res.json({ message: 'Reseña guardada' });
+});
+
+app.listen(port, () => {
+    console.log(`Servidor corriendo en el puerto ${port}`);
 });
