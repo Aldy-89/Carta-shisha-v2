@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Onyx & Ember | Private Shisha Club</title>
+    
+    <script>
+        const AGOTADOS = ["White Alman", "Tiramisú", "Big Boy"]; 
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { onyx: '#0a0a0a', gold: '#c69b3c', ash: '#b8b4b1' },
+                    fontFamily: { playfair: ['Playfair Display', 'serif'], lora: ['Lora', 'serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body { background-color: #0a0a0a !important; margin: 0; padding: 0; height: 100%; width: 100%; color: #b8b4b1; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        .page-container { position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; display: none; opacity: 0; transition: opacity 0.4s ease; flex-direction: column; overflow-y: auto; padding-bottom: 60px; }
+        .page-active { display: flex; opacity: 1; }
+        .circle-btn { width: 145px; height: 145px; border-radius: 50% !important; border: 1px solid rgba(198, 155, 60, 0.3); background: rgba(255, 255, 255, 0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; aspect-ratio: 1 / 1; }
+        .card-shisha { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(198, 155, 60, 0.1); border-left: 4px solid #c69b3c; width: 100%; padding: 1.2rem; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
+        
+        /* CORRECCIÓN: Sold Out en Rojo, Centro, Diagonal y Fondo Transparente */
+    .sold-out-badge { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%) rotate(-15deg);
+        color: #FF0000 !important; /* Rojo puro */
+        font-size: 28px; 
+        font-weight: 900; 
+        letter-spacing: 3px; 
+        text-transform: uppercase; 
+        white-space: nowrap; 
+        pointer-events: none; 
+        display: none; 
+        z-index: 10; 
+        opacity: 0.9; 
+        background: transparent !important; /* Fondo transparente asegurado */
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Sombra para que se lea bien sobre el nombre */
+    }
+    
+    .is-agotado .sold-out-badge { 
+        display: block; 
+    }
+    
+    .is-agotado { 
+        opacity: 0.5; 
+        filter: grayscale(0.5); 
+    }
+
+        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 999; color: #c69b3c; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: #0a0a0a; padding: 8px 12px; border: 1px solid rgba(198,155,60,0.3); border-radius: 4px; }
+        .leaf-tag { font-size: 8px; letter-spacing: 2px; padding: 2px 8px; border: 1px solid rgba(198, 155, 60, 0.4); margin-bottom: 6px; color: #c69b3c; text-transform: uppercase; font-weight: bold; display: inline-block;}
+        .leaf-black { border-color: #fff; color: #fff; }
+        .brand-tag { font-size: 10px; color: #c69b3c; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px; display: block; font-weight: bold; }
+        .mix-badge { background: #c69b3c; color: #0a0a0a; padding: 3px 10px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 2px; margin-bottom: 8px; display: inline-block; }
+        .reco-text { font-size: 10px; color: #c69b3c; margin-top: 5px; font-style: italic; display: block; }
+
+    .shisha-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px; /* Aquí controlas la separación exacta entre círculos */
+        margin-top: 20px;
+    }
+        select#feedback-sabor {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23b8b4b1' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 20px;
+    }
+
+    select#feedback-sabor option {
+        background-color: #0a0a0a;
+        color: white;
+    }
+    </style>
+</head>
+<body>
+
+    <!-- PANTALLA 1: START (PRINCIPAL) -->
+    <div id="start-screen" class="page-container page-active justify-center items-center px-6">
+        <header class="mb-10 text-center">
+            <h1 class="font-playfair italic text-5xl text-gold mb-2">Onyx & Ember</h1>
+            <p class="uppercase tracking-[0.4em] text-gold text-[9px] opacity-60">Private Shisha Club</p>
+        </header>
+        
+        <div class="flex flex-col gap-6 items-center">
+            <!-- BOTÓN SHISHAS -->
+            <div onclick="navigateTo('shisha-choice')" class="circle-btn w-[160px] h-[160px] border-gold/40">
+                <i class="fas fa-wind text-gold text-3xl mb-2"></i>
+                <span class="text-[10px] text-gold uppercase tracking-widest font-bold">Shisha Menu</span>
+            </div>
+
+            <!-- BOTÓN CÓCTELES -->
+            <div onclick="navigateTo('cocktail-menu')" class="circle-btn w-[160px] h-[160px] border-gold/40">
+                <i class="fas fa-glass-martini-alt text-gold text-3xl mb-2"></i>
+                <span class="text-[10px] text-gold uppercase tracking-widest font-bold">Mixology Art</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 2: ELECCIÓN SHISHAS (CORREGIDA CON FEEDBACK DEBAJO) -->
+<div id="shisha-choice" class="page-container justify-center items-center px-6">
+    <button onclick="navigateTo('start-screen')" class="back-btn">← Inicio</button>
+    
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">Shisha Menu</h2>
+        <div class="h-[1px] w-16 bg-gold/30 mx-auto mt-3"></div>
+    </div>
+
+    <!-- Contenedor unificado para respetar el margen (gap: 30px del CSS) -->
+    <div class="shisha-container">
+        <!-- 1. LIBRARY -->
+        <div onclick="navigateTo('shisha-menu')" class="circle-btn w-[170px] h-[170px]">
+            <i class="fa-solid fa-list-ul text-gold text-2xl mb-2"></i>
+            <span class="text-[10px] text-gold uppercase tracking-widest">Library</span>
+        </div>
+
+        <!-- 2. BASES -->
+        <div onclick="navigateTo('setup')" class="circle-btn w-[170px] h-[170px] border-dashed">
+            <i class="fa-solid fa-flask text-gold text-2xl mb-2"></i>
+            <span class="text-[10px] text-gold uppercase tracking-widest">Bases</span>
+        </div>
+
+        <!-- 3. FEEDBACK (Ahora debajo de Bases y con la misma separación) -->
+        <div onclick="navigateTo('feedback-screen')" class="circle-btn w-[170px] h-[170px] border-dotted opacity-80">
+            <i class="fa-solid fa-comment-dots text-gold text-2xl mb-2"></i>
+            <span class="font-playfair uppercase tracking-widest text-[10px] text-gold">Your Feedback</span>
+        </div>
+    </div>
+</div>
+
+<!-- PANTALLA 3: CÓCTELES -->
+<div id="cocktail-menu" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('start-screen')" class="back-btn">← Inicio</button>
+    <h2 class="font-playfair text-5xl text-gold mb-10 italic text-center">Mixology</h2>
+    <div class="flex flex-col items-center justify-center opacity-40 mt-20">
+        <i class="fa-solid fa-wine-glass text-gold text-4xl mb-4"></i>
+        <p class="uppercase tracking-widest text-[10px]">Próximamente</p>
+    </div>
+</div>
+
+<div id="shisha-menu" class="page-container items-center px-6 pt-24">
+    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Atrás</button>
+    <div class="text-center mb-12">
+        <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">Flavor Library</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="grid grid-cols-2 gap-6 mb-10">
+        <div onclick="navigateTo('gourmet')" class="circle-btn">
+            <i class="fa-solid fa-cookie-bite text-gold text-2xl mb-1"></i>
+            <span class="text-[10px] uppercase tracking-tighter text-gold">Gourmet</span>
+        </div>
+        <div onclick="navigateTo('fresh')" class="circle-btn">
+            <i class="fa-solid fa-snowflake text-gold text-2xl mb-1"></i>
+            <span class="text-[10px] uppercase tracking-tighter text-gold">Fresh</span>
+        </div>
+        <div onclick="navigateTo('candy')" class="circle-btn">
+            <i class="fa-solid fa-candy-cane text-gold text-2xl mb-1"></i>
+            <span class="text-[10px] uppercase tracking-tighter text-gold">Candy</span>
+        </div>
+        <div onclick="navigateTo('botanical')" class="circle-btn">
+            <i class="fa-solid fa-leaf text-gold text-2xl mb-1"></i>
+            <span class="text-[10px] uppercase tracking-tighter text-gold">Botanical</span>
+        </div>
+    </div>
+    <div onclick="navigateTo('mixology')" class="circle-btn w-[160px] h-[160px] border-gold border-2">
+        <i class="fa-solid fa-vial text-gold text-3xl mb-1"></i>
+        <span class="text-[11px] font-bold uppercase tracking-widest text-gold">House Blends</span>
+    </div>
+</div>
+
+<!-- GOURMET -->
+<div id="gourmet" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Gourmet</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha" data-name="White Alman"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">White Alman</h3><p class="text-xs opacity-60">Tarta de queso con base de galleta y toque de limón.</p></div>
+        <div class="card-shisha" data-name="Tuxedo"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Taboo</span><h3 class="text-xl font-bold">Tuxedo</h3><p class="text-xs opacity-60">Sabor a galleta Lotus caramelizada.</p></div>
+        <div class="card-shisha" data-name="Temptation"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Temptation</h3><p class="text-xs opacity-60">Chocolate blanco cremoso con frambuesa.</p></div>
+        <div class="card-shisha" data-name="Tiramisú"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Tiramisú</h3><p class="text-xs opacity-60">Café espresso, bizcocho y mascarpone.</p></div>
+        <div class="card-shisha" data-name="Lambada"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Lambada</h3><p class="text-xs opacity-60">Gofre holandés con caramelo.</p></div>
+    </div>
+</div>
+
+<!-- FRESH -->
+<div id="fresh" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Fresh</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha" data-name="Eskimo P'App"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Revoshi</span><h3 class="text-xl font-bold">Eskimo P'App</h3><p class="text-xs opacity-60">Manzana verde ácida helada.</p></div>
+        <div class="card-shisha" data-name="Clipporiz"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Clipporiz</h3><p class="text-xs opacity-60">Mix de frutos del bosque glaciares.</p></div>
+        <div class="card-shisha" data-name="Big Boy"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Al Waha</span><h3 class="text-xl font-bold">Big Boy</h3><p class="text-xs opacity-60">Sandía dulce con menta fresca.</p></div>
+        <div class="card-shisha" data-name="Huracán"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Huracán</h3><p class="text-xs opacity-60">Mezcla cítrica ultra refrescante.</p></div>
+    </div>
+</div>
+
+<!-- CANDY -->
+<div id="candy" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Candy</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha" data-name="Bubblenciaga"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">Bubblenciaga</h3><p class="text-xs opacity-60">Chicle de fresa intenso.</p></div>
+        <div class="card-shisha" data-name="Chari Zkittlez"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">Chari Zkittlez</h3><p class="text-xs opacity-60">Caramelos masticables de cereza.</p></div>
+    </div>
+</div>
+
+<!-- BOTANICAL -->
+<div id="botanical" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Botanical</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha" data-name="Magic Love"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Al Fakher</span><h3 class="text-xl font-bold">Magic Love</h3><p class="text-xs opacity-60">Pasión floral con un toque de menta.</p></div>
+        <div class="card-shisha" data-name="Vampiro"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag leaf-black">NEGRO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Vampiro</h3><p class="text-xs opacity-60">Cereza negra intensa.</p></div>
+        <div class="card-shisha" data-name="Trópido"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Trópido</h3><p class="text-xs opacity-60">Fruta exótica y fondo botánico.</p></div>
+    </div>
+</div>
+
+<!-- HOUSE BLENDS -->
+<div id="mixology" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">House Blends</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">60% White Alman + 40% Tuxedo</span><h3 class="text-xl font-bold">Lotus Cheesecake</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">70% Eskimo + 30% Clipporiz</span><h3 class="text-xl font-bold">Arctic Forest</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">50% Vampiro + 50% Bubblenciaga</span><h3 class="text-xl font-bold">Vampire Candy</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">60% Tiramisú + 40% Lambada</span><h3 class="text-xl font-bold">Morning Coffee</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">50% Big Boy + 50% Trópido</span><h3 class="text-xl font-bold">Tropical Mix</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">40% Magic Love + 60% Huracán</span><h3 class="text-xl font-bold">Floral Breeze</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">50% Temptation + 50% White Alman</span><h3 class="text-xl font-bold">Choco-Berry</h3></div>
+        <div class="card-shisha house-blend-card"><div class="sold-out-badge">FALTA INGREDIENTE</div><span class="mix-badge">60% Huracán + 40% Eskimo</span><h3 class="text-xl font-bold">Citric Storm</h3></div>
+    </div>
+</div>
+
+<!-- BASES -->
+<div id="setup" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Volver</button>
+    <div class="text-center mb-10">
+        <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Bases</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+    <div class="flex flex-col w-full max-w-md">
+        <div class="card-shisha"><h3 class="text-xl font-bold">Milky Cloud</h3><p class="text-xs opacity-60">Leche fría y agua.</p><span class="reco-text">Recomendado: Gourmet</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Citric Ice</h3><p class="text-xs opacity-60">Lima, limón y hielo.</p><span class="reco-text">Recomendado: Fresh</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Orange Sparkling</h3><p class="text-xs opacity-60">Fanta de Naranja.</p><span class="reco-text">Recomendado: Candy</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Coke Velvet</h3><p class="text-xs opacity-60">Coca-Cola Zero.</p><span class="reco-text">Recomendado: Cereza</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Red Sangría</h3><p class="text-xs opacity-60">Base de frutos rojos.</p><span class="reco-text">Recomendado: Botanical</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Green Energy</h3><p class="text-xs opacity-60">Monster o similar.</p><span class="reco-text">Recomendado: Fresh</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Smooth Gin</h3><p class="text-xs opacity-60">Toque de Seagram's.</p><span class="reco-text">Recomendado: Botanical</span></div>
+        <div class="card-shisha"><h3 class="text-xl font-bold">Pure Ice</h3><p class="text-xs opacity-60">100% hielo picado.</p><span class="reco-text">Recomendado: Cualquier Fresh</span></div>
+    </div>
+</div>
+
+<!-- FEEDBACK -->
+<div id="feedback-screen" class="page-container items-center pt-24 px-4">
+    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Volver</button>
+
+    <div class="text-center mb-6">
+        <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">Your Opinion</h2>
+        <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-white/5 p-8 border border-gold/10 rounded-sm">
+        <label class="block text-[10px] uppercase tracking-widest text-gold mb-2">¿Qué sabor has probado?</label>
+        <select id="feedback-sabor" class="w-full bg-onyx border border-gold/20 p-3 text-white mb-4 outline-none focus:border-gold appearance-none cursor-pointer">
+            <option value="" disabled selected>Selecciona un sabor...</option>
+        </select>
+
+        <label class="block text-[10px] uppercase tracking-widest text-gold mb-2">Tu valoración</label>
+        <textarea id="feedback-texto" rows="4" class="w-full bg-onyx border border-gold/20 p-3 text-white mb-6 outline-none focus:border-gold" placeholder="¿Te ha gustado? ¿Alguna sugerencia?"></textarea>
+        
+        <!-- HE CAMBIADO enviarReseña() por enviarReview() -->
+        <button onclick="enviarReview()" class="w-full py-4 border border-gold text-gold uppercase tracking-[0.3em] text-[10px] hover:bg-gold hover:text-onyx transition-all">
+            Enviar Comentario
+        </button>
+    </div>
+</div>
+
+<script>
+function navigateTo(id) {
+    const all = document.querySelectorAll('.page-container');
+    const target = document.getElementById(id);
+    if (!target) return;
+    all.forEach(p => { p.classList.remove('page-active'); p.style.display = 'none'; });
+    target.style.display = 'flex';
+    setTimeout(() => { target.classList.add('page-active'); }, 50);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Marcar sabores individuales AGOTADOS
+    document.querySelectorAll('.card-shisha[data-name]').forEach(card => {
+        const name = card.getAttribute('data-name');
+        if (name && AGOTADOS.includes(name)) {
+            card.classList.add('is-agotado');
+        }
+    });
+
+    // 2. Marcar House Blends AGOTADOS si falta algún ingrediente
+    document.querySelectorAll('.house-blend-card').forEach(card => {
+        const badge = card.querySelector('.mix-badge');
+        if (badge) {
+            const ingredientesTexto = badge.textContent;
+            const faltaAlgo = AGOTADOS.some(tabaco => 
+                ingredientesTexto.toLowerCase().includes(tabaco.toLowerCase())
+            );
+            if (faltaAlgo) {
+                card.classList.add('is-agotado');
+                const badgeAviso = card.querySelector('.sold-out-badge');
+                if (badgeAviso) badgeAviso.textContent = "FALTA INGREDIENTE";
+            }
+        }
+    });
+
+    // 3. LLENAR EL SELECTOR DE FEEDBACK (CON CATEGORÍAS SEPARADAS)
+    const selector = document.getElementById('feedback-sabor');
+    if (selector) {
+        selector.innerHTML = '<option value="" disabled selected>Selecciona un sabor...</option>';
+        
+        let saboresUnicos = new Set();
+        let misMezclas = new Set();
+        
+        // Buscamos sabores individuales en sus secciones correspondientes
+        document.querySelectorAll('#gourmet h3, #fresh h3, #candy h3, #botanical h3').forEach(titulo => {
+            const nombre = titulo.textContent.trim();
+            if (nombre && !titulo.classList.contains('section-title')) {
+                saboresUnicos.add(nombre);
+            }
+        });
+
+        // Buscamos tus mezclas específicamente en Mixology
+        document.querySelectorAll('#mixology h3').forEach(titulo => {
+            const nombre = titulo.textContent.trim();
+            if (nombre && !titulo.classList.contains('section-title')) {
+                misMezclas.add(nombre);
+            }
+        });
+
+        // Añadimos el grupo de Sabores Individuales
+        if (saboresUnicos.size > 0) {
+            const groupIndiv = document.createElement('optgroup');
+            groupIndiv.label = "── SABORES INDIVIDUALES ──";
+            Array.from(saboresUnicos).sort().forEach(nombre => {
+                const option = document.createElement('option');
+                option.value = nombre;
+                option.textContent = nombre;
+                groupIndiv.appendChild(option);
+            });
+            selector.appendChild(groupIndiv);
+        }
+
+        // Añadimos el grupo de Mis Mezclas (Arctic Forest, Choco Berry, etc.)
+        if (misMezclas.size > 0) {
+            const groupMix = document.createElement('optgroup');
+            groupMix.label = "── HOUSE BLENDS ──";
+            Array.from(misMezclas).sort().forEach(nombre => {
+                const option = document.createElement('option');
+                option.value = nombre;
+                option.textContent = nombre;
+                groupMix.appendChild(option);
+            });
+            selector.appendChild(groupMix);
+        }
+    }
+});
+
+function enviarReview() {
+    const sabor = document.getElementById('feedback-sabor').value;
+    const texto = document.getElementById('feedback-texto').value;
+
+    if (!sabor || !texto) return alert("Por favor, rellena ambos campos");
+
+    fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sabor, texto })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Error en el servidor");
+        alert("¡Gracias! Tu reseña se ha guardado.");
+        document.getElementById('feedback-sabor').value = "";
+        document.getElementById('feedback-texto').value = "";
+        navigateTo('shisha-choice');
+    })
+    .catch(err => alert("Hubo un problema al enviar: " + err.message));
+}
+</script>
+</body>
+</html>

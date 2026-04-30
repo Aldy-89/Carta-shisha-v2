@@ -1,0 +1,9 @@
+# Ignorar la carpeta de librerías de Node (pesa mucho)
+node_modules/
+
+# Ignorar archivos de sistema (opcional)
+.DS_Store
+Thumbs.db
+
+# Si no quieres que tus reseñas de prueba se suban a GitHub
+# backend/reseñas.json
