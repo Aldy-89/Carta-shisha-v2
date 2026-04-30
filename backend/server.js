@@ -38,6 +38,14 @@ app.post('/api/reviews', (req, res) => {
         });
     });
 });
+const path = require('path');
+
+// Esto le dice al servidor que sirva el archivo Index.html que está una carpeta más atrás
+app.use(express.static(path.join(__dirname, '..')));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'Index.html'));
+});
 
 // PUERTO DINÁMICO: Esto es obligatorio para que funcione en GitHub/Render/Railway
 const PORT = process.env.PORT || 3000;
