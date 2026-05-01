@@ -3,141 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Panel de Reseñas</title>
+    <title>Admin - Your Feedback</title>
     <style>
-        /* Estética similar a una carta de shishas premium */
+        /* Fondo negro puro igual que tu captura */
         body { 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            background: #0f0f0f; 
-            color: #e0e0e0; 
+            background-color: #000; 
+            color: #d4af37; 
+            font-family: 'Serif', 'Times New Roman', serif; /* Fuente elegante tipo menú */
             margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
-            background-image: radial-gradient(circle at top, #1a1a1a 0%, #000 100%);
         }
 
         h1 { 
-            color: #d4af37; /* Dorado Shisha */
-            text-align: center; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-bottom: 2px solid #d4af37;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-
-        .container { max-width: 600px; margin: auto; }
-
-        /* Tarjetas de reseña */
-        .review-card { 
-            background: #1a1a1a; 
-            padding: 20px; 
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            border: 1px solid #333;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.2s;
-        }
-
-        .review-card:hover {
-            border-color: #d4af37;
-            transform: translateY(-3px);
-        }
-
-        .fecha { 
-            font-size: 0.75rem; 
-            color: #888; 
-            display: block;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .sabor { 
-            font-weight: bold; 
-            color: #d4af37; 
-            font-size: 1.1rem;
-        }
-
-        .texto {
             font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+
+        /* Estilo de círculo para el Login, igual que tus botones */
+        .login-circle {
+            width: 250px;
+            height: 250px;
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #111 0%, #000 100%);
+            margin-top: 50px;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #d4af37;
+            color: white;
+            text-align: center;
             margin-top: 10px;
-            line-height: 1.5;
-            color: #fff;
+            width: 60%;
+            outline: none;
         }
 
-        /* Botones y Inputs */
-        .login-box { 
-            text-align: center; 
-            margin-top: 100px; 
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 15px;
+        /* Tarjetas de reseña con estilo circular o bordes muy suaves */
+        .review-card {
+            width: 90%;
+            max-width: 400px;
             border: 1px solid #d4af37;
-        }
-
-        input { 
-            padding: 12px; 
-            border-radius: 5px; 
-            border: 1px solid #333; 
-            background: #000; 
-            color: #fff; 
-            width: 80%;
+            padding: 20px;
+            border-radius: 15px;
             margin-bottom: 20px;
+            background: #0a0a0a;
             text-align: center;
         }
 
-        button { 
-            padding: 12px 25px; 
-            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%); 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            color: #000;
-            text-transform: uppercase;
-        }
-
-        button:hover {
-            filter: brightness(1.2);
-        }
-
-        #admin-content { display: none; }
-        
-        .refresh-btn {
-            display: block;
-            margin: 20px auto;
-            background: transparent;
+        .sabor-badge {
             color: #d4af37;
-            border: 1px solid #d4af37;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .texto-review {
+            color: #fff;
+            font-style: italic;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="login-box" class="login-box">
-            <h1>Staff Only</h1>
-            <input type="password" id="pass" placeholder="Introduce clave">
-            <br>
-            <button onclick="checkPass()">Entrar al Panel</button>
-        </div>
 
-        <div id="admin-content">
-            <h1>Reseñas Clientes</h1>
-            <div id="lista-reviews"></div>
-            <button class="refresh-btn" onclick="location.reload()">🔄 Actualizar Lista</button>
-        </div>
+    <h1>ADMIN PANEL</h1>
+
+    <div id="login-box" class="login-circle">
+        <span style="font-size: 0.8rem; margin-bottom: 5px;">STAFF</span>
+        <input type="password" id="pass" placeholder="••••">
+        <button onclick="checkPass()" style="background:none; border:none; color:#d4af37; margin-top:15px; cursor:pointer; font-weight:bold;">ENTRAR</button>
+    </div>
+
+    <div id="admin-content" style="display:none; width: 100%; text-align: center;">
+        <div id="lista-reviews"></div>
     </div>
 
     <script>
-        // Usamos la que te funcionaba para no liar a Git
         function checkPass() {
-            const pass = document.getElementById('pass').value;
-            if (pass === "141619") { 
+            if(document.getElementById('pass').value === "1234") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 cargarReviews();
-            } else {
-                alert("Clave incorrecta");
-            }
+            } else { alert("Error"); }
         }
 
         function cargarReviews() {
@@ -145,23 +108,13 @@
                 .then(res => res.json())
                 .then(data => {
                     const lista = document.getElementById('lista-reviews');
-                    lista.innerHTML = "";
-                    if (data.length === 0) {
-                        lista.innerHTML = "<p style='text-align:center'>No hay reseñas aún.</p>";
-                        return;
-                    }
-                    // Mostrar las últimas primero
-                    data.reverse().forEach(rev => {
-                        lista.innerHTML += `
-                            <div class="review-card">
-                                <span class="fecha">${rev.fecha || 'Reciente'}</span>
-                                <div class="sabor">💨 ${rev.sabor}</div>
-                                <div class="texto">"${rev.texto}"</div>
-                            </div>
-                        `;
-                    });
-                })
-                .catch(err => console.error("Error:", err));
+                    lista.innerHTML = data.reverse().map(rev => `
+                        <div class="review-card">
+                            <div class="sabor-badge">${rev.sabor}</div>
+                            <div class="texto-review">"${rev.texto}"</div>
+                        </div>
+                    `).join('');
+                });
         }
     </script>
 </body>
