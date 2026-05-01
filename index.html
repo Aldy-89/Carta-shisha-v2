@@ -148,28 +148,28 @@
     <!-- Contenedor unificado para respetar el margen (gap: 30px del CSS) -->
     <div class="shisha-container">
         <!-- 1. LIBRARY -->
-        <div onclick="navigateTo('shisha-menu')" class="circle-btn w-[170px] h-[170px]">
+        <a href="#shisha-menu" class="circle-btn w-[170px] h-[170px] no-underline">
             <i class="fa-solid fa-list-ul text-gold text-2xl mb-2"></i>
             <span class="text-[10px] text-gold uppercase tracking-widest">Library</span>
-        </div>
+        </a>
 
         <!-- 2. BASES -->
-        <div onclick="navigateTo('setup')" class="circle-btn w-[170px] h-[170px] border-dashed">
+        <a href="#setup" class="circle-btn w-[170px] h-[170px] border-dashed no-underline">
             <i class="fa-solid fa-flask text-gold text-2xl mb-2"></i>
             <span class="text-[10px] text-gold uppercase tracking-widest">Bases</span>
-        </div>
+        </a>
 
         <!-- 3. FEEDBACK (Ahora debajo de Bases y con la misma separación) -->
-        <div onclick="navigateTo('feedback-screen')" class="circle-btn w-[170px] h-[170px] border-dotted opacity-80">
+        <a href="#feedback-screen" class="circle-btn w-[170px] h-[170px] border-dotted opacity-80 no-underline">
             <i class="fa-solid fa-comment-dots text-gold text-2xl mb-2"></i>
             <span class="font-playfair uppercase tracking-widest text-[10px] text-gold">Your Feedback</span>
-        </div>
+        </a>
     </div>
 </div>
 
 <!-- PANTALLA 3: CÓCTELES -->
 <div id="cocktail-menu" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('start-screen')" class="back-btn">← Inicio</button>
+    <a href="#start-screen" class="back-btn">← Inicio</a>
     <h2 class="font-playfair text-5xl text-gold mb-10 italic text-center">Mixology</h2>
     <div class="flex flex-col items-center justify-center opacity-40 mt-20">
         <i class="fa-solid fa-wine-glass text-gold text-4xl mb-4"></i>
@@ -178,38 +178,38 @@
 </div>
 
 <div id="shisha-menu" class="page-container items-center px-6 pt-24">
-    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Atrás</button>
+    <a href="#shisha-choice" class="back-btn">← Atrás</a>
     <div class="text-center mb-12">
         <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">Flavor Library</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
     </div>
     <div class="grid grid-cols-2 gap-6 mb-10">
-        <div onclick="navigateTo('gourmet')" class="circle-btn">
+        <a href="#gourmet" class="circle-btn">
             <i class="fa-solid fa-cookie-bite text-gold text-2xl mb-1"></i>
             <span class="text-[10px] uppercase tracking-tighter text-gold">Gourmet</span>
-        </div>
-        <div onclick="navigateTo('fresh')" class="circle-btn">
+        </a>
+        <a href="#fresh" class="circle-btn">
             <i class="fa-solid fa-snowflake text-gold text-2xl mb-1"></i>
             <span class="text-[10px] uppercase tracking-tighter text-gold">Fresh</span>
-        </div>
-        <div onclick="navigateTo('candy')" class="circle-btn">
+        </a>
+        <a href="#candy" class="circle-btn">
             <i class="fa-solid fa-candy-cane text-gold text-2xl mb-1"></i>
             <span class="text-[10px] uppercase tracking-tighter text-gold">Candy</span>
-        </div>
-        <div onclick="navigateTo('botanical')" class="circle-btn">
+        </a>
+        <a href="#botanical" class="circle-btn">
             <i class="fa-solid fa-leaf text-gold text-2xl mb-1"></i>
             <span class="text-[10px] uppercase tracking-tighter text-gold">Botanical</span>
-        </div>
+        </a>
     </div>
-    <div onclick="navigateTo('mixology')" class="circle-btn w-[160px] h-[160px] border-gold border-2">
+    <a href="#mixology" class="circle-btn w-[160px] h-[160px] border-gold border-2">
         <i class="fa-solid fa-vial text-gold text-3xl mb-1"></i>
         <span class="text-[11px] font-bold uppercase tracking-widest text-gold">House Blends</span>
-    </div>
+    </a>
 </div>
 
 <!-- GOURMET -->
 <div id="gourmet" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <a href="#shisha-menu" class="back-btn">← Categorías</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Gourmet</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -225,7 +225,7 @@
 
 <!-- FRESH -->
 <div id="fresh" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <a href="#shisha-menu" class="back-btn">← Categorías</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Fresh</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -240,7 +240,7 @@
 
 <!-- CANDY -->
 <div id="candy" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <a href="#shisha-menu" class="back-btn">← Categorías</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Candy</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -253,7 +253,7 @@
 
 <!-- BOTANICAL -->
 <div id="botanical" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <a href="#shisha-menu" class="back-btn">← Categorías</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Botanical</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -267,7 +267,7 @@
 
 <!-- HOUSE BLENDS -->
 <div id="mixology" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-menu')" class="back-btn">← Categorías</button>
+    <a href="#shisha-menu" class="back-btn">← Categorías</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">House Blends</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -286,7 +286,7 @@
 
 <!-- BASES -->
 <div id="setup" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Volver</button>
+    <a href="#shisha-choice" class="back-btn">← Volver</a>
     <div class="text-center mb-10">
         <h2 class="font-playfair text-5xl text-gold italic uppercase tracking-widest">Bases</h2>
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
@@ -305,7 +305,7 @@
 
 <!-- FEEDBACK -->
 <div id="feedback-screen" class="page-container items-center pt-24 px-4">
-    <button onclick="navigateTo('shisha-choice')" class="back-btn">← Volver</button>
+    <a href="#shisha-choice" class="back-btn">← Volver</a>
 
     <div class="text-center mb-6">
         <h2 class="font-playfair text-4xl text-gold italic uppercase tracking-widest">Your Opinion</h2>
@@ -329,17 +329,34 @@
 </div>
 
 <script>
+// 1. LA LÓGICA DE NAVEGACIÓN (Sustituye a navigateTo y abrirSeccion)
 function navigateTo(id) {
-    const all = document.querySelectorAll('.page-container');
-    const target = document.getElementById(id);
-    if (!target) return;
-    all.forEach(p => { p.classList.remove('page-active'); p.style.display = 'none'; });
-    target.style.display = 'flex';
-    setTimeout(() => { target.classList.add('page-active'); }, 50);
+    window.location.hash = id; 
 }
 
+window.addEventListener('hashchange', function() {
+    const hash = window.location.hash || '#start-screen';
+    const targetId = hash.replace('#', '');
+
+    // Ocultamos todas las pantallas con la clase page-container
+    document.querySelectorAll('.page-container').forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('page-active');
+    });
+
+    // Mostramos la pantalla actual
+    const targetPage = document.getElementById(targetId);
+    if (targetPage) {
+        targetPage.style.display = 'flex';
+        setTimeout(() => {
+            targetPage.classList.add('page-active');
+        }, 10);
+    }
+});
+
+// 2. LÓGICA DE CONTENIDO (Mantenemos tu código intacto)
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Marcar sabores individuales AGOTADOS
+    // Marcar sabores individuales AGOTADOS
     document.querySelectorAll('.card-shisha[data-name]').forEach(card => {
         const name = card.getAttribute('data-name');
         if (name && AGOTADOS.includes(name)) {
@@ -347,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 2. Marcar House Blends AGOTADOS si falta algún ingrediente
+    // Marcar House Blends AGOTADOS
     document.querySelectorAll('.house-blend-card').forEach(card => {
         const badge = card.querySelector('.mix-badge');
         if (badge) {
@@ -363,15 +380,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 3. LLENAR EL SELECTOR DE FEEDBACK (CON CATEGORÍAS SEPARADAS)
+    // LLENAR EL SELECTOR DE FEEDBACK
     const selector = document.getElementById('feedback-sabor');
     if (selector) {
         selector.innerHTML = '<option value="" disabled selected>Selecciona un sabor...</option>';
-        
         let saboresUnicos = new Set();
         let misMezclas = new Set();
         
-        // Buscamos sabores individuales en sus secciones correspondientes
         document.querySelectorAll('#gourmet h3, #fresh h3, #candy h3, #botanical h3').forEach(titulo => {
             const nombre = titulo.textContent.trim();
             if (nombre && !titulo.classList.contains('section-title')) {
@@ -379,7 +394,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Buscamos tus mezclas específicamente en Mixology
         document.querySelectorAll('#mixology h3').forEach(titulo => {
             const nombre = titulo.textContent.trim();
             if (nombre && !titulo.classList.contains('section-title')) {
@@ -387,7 +401,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Añadimos el grupo de Sabores Individuales
         if (saboresUnicos.size > 0) {
             const groupIndiv = document.createElement('optgroup');
             groupIndiv.label = "── SABORES INDIVIDUALES ──";
@@ -400,7 +413,6 @@ document.addEventListener("DOMContentLoaded", () => {
             selector.appendChild(groupIndiv);
         }
 
-        // Añadimos el grupo de Mis Mezclas (Arctic Forest, Choco Berry, etc.)
         if (misMezclas.size > 0) {
             const groupMix = document.createElement('optgroup');
             groupMix.label = "── HOUSE BLENDS ──";
@@ -413,8 +425,12 @@ document.addEventListener("DOMContentLoaded", () => {
             selector.appendChild(groupMix);
         }
     }
+
+    // Forzar la carga de la pantalla inicial basada en el hash actual
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
 });
 
+// 3. ENVIAR REVIEW
 function enviarReview() {
     const sabor = document.getElementById('feedback-sabor').value;
     const texto = document.getElementById('feedback-texto').value;
@@ -435,51 +451,6 @@ function enviarReview() {
     })
     .catch(err => alert("Hubo un problema al enviar: " + err.message));
 }
-
-// 1. Al cargar la web, "anclamos" la página principal para que el gesto no la cierre
-window.onload = function() {
-    window.history.replaceState({ section: 'inicio' }, "");
-};
-
-// 2. Tu función de siempre, mejorada para ocultar el menú al entrar
-function abrirSeccion(nombreSeccion) {
-    // Ocultamos el menú principal (asegúrate de que tu menú tenga este ID)
-    const menu = document.getElementById('menu-principal');
-    if (menu) menu.style.display = 'none';
-
-    // Mostramos la sección elegida
-    const seccion = document.getElementById(nombreSeccion);
-    if (seccion) seccion.style.display = 'block';
-
-    // Creamos la marca en el historial
-    window.history.pushState({ section: nombreSeccion }, "");
-}
-
-window.addEventListener('hashchange', function() {
-    const seccionActual = window.location.hash;
-
-    // 1. Escondemos TODO (Asegúrate de que estos IDs coincidan con tus pantallas)
-    const pantallas = ['start-screen', 'shisha-choice', 'cocktail-menu'];
-    
-    pantallas.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'none';
-    });
-
-    // 2. Si estamos en el inicio
-    if (seccionActual === "" || seccionActual === "#" || seccionActual === "#start-screen") {
-        document.getElementById('start-screen').style.display = 'flex';
-    } 
-    // 3. Mostrar pantalla seleccionada
-    else {
-        const idParaMostrar = seccionActual.replace('#', '');
-        const el = document.getElementById(idParaMostrar);
-        if (el) el.style.display = 'flex';
-    }
-});
-
-// Forzar carga inicial
-window.dispatchEvent(new HashChangeEvent('hashchange'));
 </script>
 </body>
 </html>
