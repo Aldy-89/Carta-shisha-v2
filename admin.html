@@ -3,45 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control - Reseñas</title>
+    <title>Admin - Panel de Reseñas</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 20px; }
-        h1 { color: #f39c12; text-align: center; }
-        .container { max-width: 800px; margin: auto; }
-        .review-card { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid #f39c12; }
-        .fecha { font-size: 0.8rem; color: #aaa; }
-        .sabor { font-weight: bold; color: #f39c12; }
-        .login-box { text-align: center; margin-top: 50px; }
-        input { padding: 10px; border-radius: 5px; border: none; }
-        button { padding: 10px 20px; background: #f39c12; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        /* Estética similar a una carta de shishas premium */
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background: #0f0f0f; 
+            color: #e0e0e0; 
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(circle at top, #1a1a1a 0%, #000 100%);
+        }
+
+        h1 { 
+            color: #d4af37; /* Dorado Shisha */
+            text-align: center; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .container { max-width: 600px; margin: auto; }
+
+        /* Tarjetas de reseña */
+        .review-card { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            border: 1px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+        }
+
+        .review-card:hover {
+            border-color: #d4af37;
+            transform: translateY(-3px);
+        }
+
+        .fecha { 
+            font-size: 0.75rem; 
+            color: #888; 
+            display: block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .sabor { 
+            font-weight: bold; 
+            color: #d4af37; 
+            font-size: 1.1rem;
+        }
+
+        .texto {
+            font-style: italic;
+            margin-top: 10px;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        /* Botones y Inputs */
+        .login-box { 
+            text-align: center; 
+            margin-top: 100px; 
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid #d4af37;
+        }
+
+        input { 
+            padding: 12px; 
+            border-radius: 5px; 
+            border: 1px solid #333; 
+            background: #000; 
+            color: #fff; 
+            width: 80%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        button { 
+            padding: 12px 25px; 
+            background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%); 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            color: #000;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            filter: brightness(1.2);
+        }
+
         #admin-content { display: none; }
+        
+        .refresh-btn {
+            display: block;
+            margin: 20px auto;
+            background: transparent;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div id="login-box" class="login-box">
-            <h1>Acceso Administrador</h1>
-            <input type="password" id="pass" placeholder="Contraseña">
-            <button onclick="checkPass()">Entrar</button>
+            <h1>Staff Only</h1>
+            <input type="password" id="pass" placeholder="Introduce clave">
+            <br>
+            <button onclick="checkPass()">Entrar al Panel</button>
         </div>
 
         <div id="admin-content">
-            <h1>Reseñas Recibidas</h1>
+            <h1>Reseñas Clientes</h1>
             <div id="lista-reviews"></div>
-            <br>
-            <button onclick="location.reload()">Actualizar</button>
+            <button class="refresh-btn" onclick="location.reload()">🔄 Actualizar Lista</button>
         </div>
     </div>
 
     <script>
+        // Usamos la que te funcionaba para no liar a Git
         function checkPass() {
             const pass = document.getElementById('pass').value;
-            if (pass === "141619") { // <--- AQUÍ PUEDES CAMBIAR TU CONTRASEÑA
+            if (pass === "141619") { 
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 cargarReviews();
             } else {
-                alert("Contraseña incorrecta");
+                alert("Clave incorrecta");
             }
         }
 
@@ -52,20 +147,21 @@
                     const lista = document.getElementById('lista-reviews');
                     lista.innerHTML = "";
                     if (data.length === 0) {
-                        lista.innerHTML = "<p>No hay reseñas todavía.</p>";
+                        lista.innerHTML = "<p style='text-align:center'>No hay reseñas aún.</p>";
                         return;
                     }
+                    // Mostrar las últimas primero
                     data.reverse().forEach(rev => {
                         lista.innerHTML += `
                             <div class="review-card">
-                                <p class="fecha">${rev.fecha || 'Sin fecha'}</p>
-                                <p><span class="sabor">Sabor:</span> ${rev.sabor}</p>
-                                <p><em>"${rev.texto}"</em></p>
+                                <span class="fecha">${rev.fecha || 'Reciente'}</span>
+                                <div class="sabor">💨 ${rev.sabor}</div>
+                                <div class="texto">"${rev.texto}"</div>
                             </div>
                         `;
                     });
                 })
-                .catch(err => alert("Error al cargar reseñas"));
+                .catch(err => console.error("Error:", err));
         }
     </script>
 </body>
