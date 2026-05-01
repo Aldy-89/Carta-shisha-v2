@@ -34,6 +34,15 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Index.html'));
 });
 
+// Ruta para VER las reseñas desde el navegador
+app.get('/ver-reviews', (req, res) => {
+    const filePath = path.join(__dirname, 'reviews.json');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err || !data) return res.send("Aún no hay reseñas.");
+        res.json(JSON.parse(data));
+    });
+});
+
 app.listen(port, () => {
     console.log("Servidor online");
 });
