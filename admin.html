@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Reseñas</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        h1 { color: #f39c12; text-align: center; }
+        .container { max-width: 800px; margin: auto; }
+        .review-card { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid #f39c12; }
+        .fecha { font-size: 0.8rem; color: #aaa; }
+        .sabor { font-weight: bold; color: #f39c12; }
+        .login-box { text-align: center; margin-top: 50px; }
+        input { padding: 10px; border-radius: 5px; border: none; }
+        button { padding: 10px 20px; background: #f39c12; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #admin-content { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="login-box" class="login-box">
+            <h1>Acceso Administrador</h1>
+            <input type="password" id="pass" placeholder="Contraseña">
+            <button onclick="checkPass()">Entrar</button>
+        </div>
+
+        <div id="admin-content">
+            <h1>Reseñas Recibidas</h1>
+            <div id="lista-reviews"></div>
+            <br>
+            <button onclick="location.reload()">Actualizar</button>
+        </div>
+    </div>
+
+    <script>
+        function checkPass() {
+            const pass = document.getElementById('pass').value;
+            if (pass === "1234") { // <--- AQUÍ PUEDES CAMBIAR TU CONTRASEÑA
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                cargarReviews();
+            } else {
+                alert("Contraseña incorrecta");
+            }
+        }
+
+        function cargarReviews() {
+            fetch('/api/reviews')
+                .then(res => res.json())
+                .then(data => {
+                    const lista = document.getElementById('lista-reviews');
+                    lista.innerHTML = "";
+                    if (data.length === 0) {
+                        lista.innerHTML = "<p>No hay reseñas todavía.</p>";
+                        return;
+                    }
+                    data.reverse().forEach(rev => {
+                        lista.innerHTML += `
+                            <div class="review-card">
+                                <p class="fecha">${rev.fecha || 'Sin fecha'}</p>
+                                <p><span class="sabor">Sabor:</span> ${rev.sabor}</p>
+                                <p><em>"${rev.texto}"</em></p>
+                            </div>
+                        `;
+                    });
+                })
+                .catch(err => alert("Error al cargar reseñas"));
+        }
+    </script>
+</body>
+</html>

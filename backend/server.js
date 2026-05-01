@@ -34,12 +34,16 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'Index.html'));
 });
 
-// Ruta para VER las reseñas desde el navegador
-app.get('/ver-reviews', (req, res) => {
+// Ruta para que admin.html pueda leer las reseñas
+app.get('/api/reviews', (req, res) => {
     const filePath = path.join(__dirname, 'reviews.json');
     fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err || !data) return res.send("Aún no hay reseñas.");
-        res.json(JSON.parse(data));
+        if (err || !data) return res.json([]); // Si hay error o no hay datos, manda una lista vacía
+        try {
+            res.json(JSON.parse(data));
+        } catch (e) {
+            res.json([]);
+        }
     });
 });
 
