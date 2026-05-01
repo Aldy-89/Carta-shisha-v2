@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '..')));
 // 2. Ruta para guardar reseñas
 app.post('/api/reviews', (req, res) => {
     const nuevaReseña = req.body;
-    const filePath = path.join(__dirname, 'reseñas.json');
+    const filePath = path.join(__dirname, 'reviews.json');
 
     fs.readFile(filePath, 'utf8', (err, data) => {
         let reseñas = [];
