@@ -436,28 +436,44 @@ function enviarReview() {
     .catch(err => alert("Hubo un problema al enviar: " + err.message));
 }
 
-// 1. Cuando el usuario abre una sección (un círculo), añadimos un "estado" al historial
-function abrirSeccion(nombreSeccion) {
-    // Tu código para mostrar la sección...
-    document.getElementById(nombreSeccion).style.display = 'block';
+// 1. Al cargar la web, "anclamos" la página principal para que el gesto no la cierre
+window.onload = function() {
+    window.history.replaceState({ section: 'inicio' }, "");
+};
 
-    // ESTO ES LO NUEVO: Crea una marca en el historial del móvil
+// 2. Tu función de siempre, mejorada para ocultar el menú al entrar
+function abrirSeccion(nombreSeccion) {
+    // Ocultamos el menú principal (asegúrate de que tu menú tenga este ID)
+    const menu = document.getElementById('menu-principal');
+    if (menu) menu.style.display = 'none';
+
+    // Mostramos la sección elegida
+    const seccion = document.getElementById(nombreSeccion);
+    if (seccion) seccion.style.display = 'block';
+
+    // Creamos la marca en el historial
     window.history.pushState({ section: nombreSeccion }, "");
 }
 
-// 2. Detectamos cuando el usuario pulsa el botón "Atrás" del móvil
+// 3. El detector de gestos/botón atrás
 window.onpopstate = function(event) {
-    // Si el usuario da atrás, ocultamos todas las secciones y volvemos al menú principal
-    const secciones = ['library', 'bases', 'feedback']; // Pon aquí los IDs de tus secciones
+    // Lista de tus secciones
+    const secciones = ['library', 'bases', 'feedback']; 
+    
+    // Ocultamos todo lo que esté abierto
     secciones.forEach(id => {
         const elemento = document.getElementById(id);
         if (elemento) elemento.style.display = 'none';
     });
 
-    // Mostramos el menú principal
-    document.getElementById('menu-principal').style.display = 'block';
-};
+    // Siempre mostramos el menú principal al volver atrás
+    const menu = document.getElementById('menu-principal');
+    if (menu) menu.style.display = 'block';
 
+    // Truco extra: Si el usuario vuelve a deslizar estando en el inicio, 
+    // mantenemos la marca para que no se salga de la web a la primera
+    window.history.pushState({ section: 'inicio' }, "");
+};
 </script>
 </body>
 </html>
