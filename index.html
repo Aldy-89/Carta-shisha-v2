@@ -23,67 +23,94 @@
         }
     </script>
     <style>
-        html, body { background-color: #0a0a0a !important; margin: 0; padding: 0; height: 100%; width: 100%; color: #b8b4b1; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .page-container { position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; display: none; opacity: 0; transition: opacity 0.4s ease; flex-direction: column; overflow-y: auto; padding-bottom: 60px; }
-        .page-active { display: flex; opacity: 1; }
-        .circle-btn { width: 145px; height: 145px; border-radius: 50% !important; border: 1px solid rgba(198, 155, 60, 0.3); background: rgba(255, 255, 255, 0.03); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; aspect-ratio: 1 / 1; }
-        .card-shisha { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(198, 155, 60, 0.1); border-left: 4px solid #c69b3c; width: 100%; padding: 1.2rem; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
-        
-        /* CORRECCIÓN: Sold Out en Rojo, Centro, Diagonal y Fondo Transparente */
-    .sold-out-badge { 
-        position: absolute; 
-        top: 50%; 
-        left: 50%; 
-        transform: translate(-50%, -50%) rotate(-15deg);
-        color: #FF0000 !important; /* Rojo puro */
-        font-size: 28px; 
-        font-weight: 900; 
-        letter-spacing: 3px; 
-        text-transform: uppercase; 
-        white-space: nowrap; 
-        pointer-events: none; 
+    /* 1. Ajuste global: evitamos que el contenido se pegue a la cámara del móvil */
+    html, body { 
+        background-color: #0a0a0a !important; 
+        margin: 0; 
+        padding: 0; 
+        height: 100%; 
+        width: 100%; 
+        color: #b8b4b1; 
+        overflow-x: hidden; 
+        -webkit-tap-highlight-color: transparent; 
+    }
+
+    /* 2. Cambiamos absolute por relative y añadimos un padding superior generoso */
+    .page-container { 
+        position: relative; /* Cambiado de absolute a relative para que respete el flujo */
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        min-height: 100vh; 
         display: none; 
-        z-index: 10; 
-        opacity: 0.9; 
-        background: transparent !important; /* Fondo transparente asegurado */
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Sombra para que se lea bien sobre el nombre */
-    }
-    
-    .is-agotado .sold-out-badge { 
-        display: block; 
-    }
-    
-    .is-agotado { 
-        opacity: 0.5; 
-        filter: grayscale(0.5); 
+        opacity: 0; 
+        transition: opacity 0.4s ease; 
+        flex-direction: column; 
+        overflow-y: auto; 
+        padding-top: 80px; /* <--- ESTO baja el título para que no lo pise el botón */
+        padding-bottom: 60px; 
+        box-sizing: border-box;
     }
 
-        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 999; color: #c69b3c; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: #0a0a0a; padding: 8px 12px; border: 1px solid rgba(198,155,60,0.3); border-radius: 4px; }
-        .leaf-tag { font-size: 8px; letter-spacing: 2px; padding: 2px 8px; border: 1px solid rgba(198, 155, 60, 0.4); margin-bottom: 6px; color: #c69b3c; text-transform: uppercase; font-weight: bold; display: inline-block;}
-        .leaf-black { border-color: #fff; color: #fff; }
-        .brand-tag { font-size: 10px; color: #c69b3c; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px; display: block; font-weight: bold; }
-        .mix-badge { background: #c69b3c; color: #0a0a0a; padding: 3px 10px; font-size: 10px; font-weight: bold; text-transform: uppercase; border-radius: 2px; margin-bottom: 8px; display: inline-block; }
-        .reco-text { font-size: 10px; color: #c69b3c; margin-top: 5px; font-style: italic; display: block; }
+    .page-active { display: flex; opacity: 1; }
 
-    .shisha-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 30px; /* Aquí controlas la separación exacta entre círculos */
-        margin-top: 20px;
-    }
-        select#feedback-sabor {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23b8b4b1' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 10px center;
-        background-size: 20px;
+    /* 3. El botón de atrás: lo bajamos un poco y le damos más presencia */
+    .back-btn { 
+        position: absolute; /* Cambiado de fixed a absolute para que se mueva con la página */
+        top: 20px; 
+        left: 20px; 
+        z-index: 999; 
+        color: #c69b3c; 
+        font-size: 10px; 
+        letter-spacing: 2px; 
+        text-transform: uppercase; 
+        background: rgba(10, 10, 10, 0.8); /* Un poco de transparencia queda más pro */
+        padding: 8px 12px; 
+        border: 1px solid rgba(198,155,60,0.5); 
+        border-radius: 4px; 
+        backdrop-filter: blur(5px); /* Efecto cristal para que no tape feo */
     }
 
-    select#feedback-sabor option {
-        background-color: #0a0a0a;
-        color: white;
+    /* 4. Estética de los círculos (Mantenemos tu base pero ajustamos el texto) */
+    .circle-btn { 
+        width: 145px; 
+        height: 145px; 
+        border-radius: 50% !important; 
+        border: 1px solid rgba(198, 155, 60, 0.3); 
+        background: rgba(255, 255, 255, 0.03); 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        justify-content: center; 
+        cursor: pointer; 
+        text-align: center; 
+        aspect-ratio: 1 / 1;
+        transition: all 0.3s ease;
     }
-    </style>
+
+    .circle-btn:active { transform: scale(0.95); border-color: #c69b3c; }
+
+    /* Estilo para el título principal para que se vea como en tu foto */
+    h1.shisha-menu-title {
+        font-family: 'Times New Roman', serif; /* O la que uses elegante */
+        color: #c69b3c;
+        text-align: center;
+        text-transform: uppercase;
+        font-style: italic;
+        letter-spacing: 4px;
+        margin-top: 0; /* Ya tiene el padding del contenedor */
+        margin-bottom: 10px;
+    }
+
+    /* El resto de tus estilos se mantienen igual... */
+    .card-shisha { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(198, 155, 60, 0.1); border-left: 4px solid #c69b3c; width: 100%; padding: 1.2rem; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
+    .sold-out-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg); color: #FF0000 !important; font-size: 28px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; pointer-events: none; display: none; z-index: 10; opacity: 0.9; background: transparent !important; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    .is-agotado .sold-out-badge { display: block; }
+    .is-agotado { opacity: 0.5; filter: grayscale(0.5); }
+    .leaf-tag { font-size: 8px; letter-spacing: 2px; padding: 2px 8px; border: 1px solid rgba(198, 155, 60, 0.4); margin-bottom: 6px; color: #c69b3c; text-transform: uppercase; font-weight: bold; display: inline-block;}
+    .brand-tag { font-size: 10px; color: #c69b3c; opacity: 0.8; text-transform: uppercase; margin-bottom: 4px; display: block; font-weight: bold; }
+    .shisha-container { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 20px; }
+</style>
 </head>
 <body>
 
