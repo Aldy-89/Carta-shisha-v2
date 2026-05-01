@@ -123,16 +123,16 @@
         
         <div class="flex flex-col gap-6 items-center">
             <!-- BOTÓN SHISHAS -->
-            <div onclick="navigateTo('shisha-choice')" class="circle-btn w-[160px] h-[160px] border-gold/40">
+            <a href="#shisha-choice" class="circle-btn w-[160px] h-[160px] border-gold/40">
                 <i class="fas fa-wind text-gold text-3xl mb-2"></i>
                 <span class="text-[10px] text-gold uppercase tracking-widest font-bold">Shisha Menu</span>
-            </div>
+            </a>
 
             <!-- BOTÓN CÓCTELES -->
-            <div onclick="navigateTo('cocktail-menu')" class="circle-btn w-[160px] h-[160px] border-gold/40">
+            <a href="#cocktail-menu" class="circle-btn w-[160px] h-[160px] border-gold/40">
                 <i class="fas fa-glass-martini-alt text-gold text-3xl mb-2"></i>
                 <span class="text-[10px] text-gold uppercase tracking-widest font-bold">Mixology Art</span>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -455,25 +455,31 @@ function abrirSeccion(nombreSeccion) {
     window.history.pushState({ section: nombreSeccion }, "");
 }
 
-// 3. El detector de gestos/botón atrás
-window.onpopstate = function(event) {
-    // Lista de tus secciones
-    const secciones = ['library', 'bases', 'feedback']; 
+window.addEventListener('hashchange', function() {
+    const seccionActual = window.location.hash;
+
+    // 1. Escondemos TODO (Asegúrate de que estos IDs coincidan con tus pantallas)
+    const pantallas = ['start-screen', 'shisha-choice', 'cocktail-menu'];
     
-    // Ocultamos todo lo que esté abierto
-    secciones.forEach(id => {
-        const elemento = document.getElementById(id);
-        if (elemento) elemento.style.display = 'none';
+    pantallas.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
     });
 
-    // Siempre mostramos el menú principal al volver atrás
-    const menu = document.getElementById('menu-principal');
-    if (menu) menu.style.display = 'block';
+    // 2. Si estamos en el inicio
+    if (seccionActual === "" || seccionActual === "#" || seccionActual === "#start-screen") {
+        document.getElementById('start-screen').style.display = 'flex';
+    } 
+    // 3. Mostrar pantalla seleccionada
+    else {
+        const idParaMostrar = seccionActual.replace('#', '');
+        const el = document.getElementById(idParaMostrar);
+        if (el) el.style.display = 'flex';
+    }
+});
 
-    // Truco extra: Si el usuario vuelve a deslizar estando en el inicio, 
-    // mantenemos la marca para que no se salga de la web a la primera
-    window.history.pushState({ section: 'inicio' }, "");
-};
+// Forzar carga inicial
+window.dispatchEvent(new HashChangeEvent('hashchange'));
 </script>
 </body>
 </html>
