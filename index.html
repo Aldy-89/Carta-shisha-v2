@@ -435,6 +435,29 @@ function enviarReview() {
     })
     .catch(err => alert("Hubo un problema al enviar: " + err.message));
 }
+
+// 1. Cuando el usuario abre una sección (un círculo), añadimos un "estado" al historial
+function abrirSeccion(nombreSeccion) {
+    // Tu código para mostrar la sección...
+    document.getElementById(nombreSeccion).style.display = 'block';
+
+    // ESTO ES LO NUEVO: Crea una marca en el historial del móvil
+    window.history.pushState({ section: nombreSeccion }, "");
+}
+
+// 2. Detectamos cuando el usuario pulsa el botón "Atrás" del móvil
+window.onpopstate = function(event) {
+    // Si el usuario da atrás, ocultamos todas las secciones y volvemos al menú principal
+    const secciones = ['library', 'bases', 'feedback']; // Pon aquí los IDs de tus secciones
+    secciones.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) elemento.style.display = 'none';
+    });
+
+    // Mostramos el menú principal
+    document.getElementById('menu-principal').style.display = 'block';
+};
+
 </script>
 </body>
 </html>
