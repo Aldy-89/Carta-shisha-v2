@@ -6,7 +6,7 @@
     <title>Onyx & Ember | Private Shisha Club</title>
     
     <script>
-        const AGOTADOS = ["White Alman", "Tiramisú", "Big Boy"]; 
+        const AGOTADOS = ["White Alman", "Tiramisú"]; 
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -112,16 +112,29 @@
     .shisha-container { display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 20px; }
 
     /* Esto arregla el texto de "Recomendado" en las Bases */
-.reco-text { 
-    display: block;
-    font-size: 9px;            /* Más pequeño */
-    color: #c69b3c !important; /* El dorado Onyx & Ember */
-    text-transform: uppercase; /* En mayúsculas queda más pro */
-    letter-spacing: 1px;       /* Un poco de espacio entre letras */
-    margin-top: 8px;           /* Separación del texto de arriba */
-    opacity: 0.8;              /* Un toque de transparencia para que no brille tanto */
-}
-</style>
+    .reco-text { 
+        display: block;
+        font-size: 9px;            /* Más pequeño */
+        color: #c69b3c !important; /* El dorado Onyx & Ember */
+        text-transform: uppercase; /* En mayúsculas queda más pro */
+        letter-spacing: 1px;       /* Un poco de espacio entre letras */
+        margin-top: 8px;           /* Separación del texto de arriba */
+        opacity: 0.8;              /* Un toque de transparencia para que no brille tanto */
+    }
+
+    /* Esto fuerza a que todos los enlaces dentro de tus botones sean dorados */
+    .circle-btn a, 
+    .circle-btn span,
+    a.circle-btn {
+        color: #d4af37 !important; /* Usa aquí tu código exacto de color oro */
+        text-decoration: none !important;
+    }
+
+    /* Si quieres que solo sea el nombre de la mezcla */
+    .host-blends-title {
+        color: #d4af37 !important;
+    }
+    </style>
 </head>
 <body>
 
@@ -227,9 +240,11 @@
     </div>
     <div class="flex flex-col w-full max-w-md">
         <div class="card-shisha" data-name="White Alman"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">White Alman</h3><p class="text-xs opacity-60">Tarta de queso con base de galleta y toque de limón.</p></div>
-        <div class="card-shisha" data-name="Tuxedo"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Taboo</span><h3 class="text-xl font-bold">Tuxedo</h3><p class="text-xs opacity-60">Sabor a galleta Lotus caramelizada.</p></div>
-        <div class="card-shisha" data-name="Temptation"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Temptation</h3><p class="text-xs opacity-60">Chocolate blanco cremoso con frambuesa.</p></div>
-        <div class="card-shisha" data-name="Tiramisú"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Tiramisú</h3><p class="text-xs opacity-60">Café espresso, bizcocho y mascarpone.</p></div>
+        <div class="card-shisha" data-name="Lambada"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">White Brown</h3><p class="text-xs opacity-60">Frappé cremoso con avellanas y almendras.</p></div>
+        <div class="card-shisha" data-name="Lambada"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">KaffaYayo</h3><p class="text-xs opacity-60">Coco, almendra y vainilla bourbon.</p></div>
+        <div class="card-shisha" data-name="Tuxedo"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Taboo</span><h3 class="text-xl font-bold">Tuxedo</h3><p class="text-xs opacity-60">Sabor a galleta Lotus.</p></div>
+        <div class="card-shisha" data-name="Temptation"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Temptation</h3><p class="text-xs opacity-60">Chocolate blanco cremoso con frutos rojos.</p></div>
+        <div class="card-shisha" data-name="Tiramisú"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Tiramisú</h3><p class="text-xs opacity-60">Tiramisú.</p></div>
         <div class="card-shisha" data-name="Lambada"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Lambada</h3><p class="text-xs opacity-60">Gofre holandés con caramelo.</p></div>
     </div>
 </div>
@@ -242,7 +257,7 @@
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
     </div>
     <div class="flex flex-col w-full max-w-md">
-        <div class="card-shisha" data-name="Eskimo P'App"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Revoshi</span><h3 class="text-xl font-bold">Eskimo P'App</h3><p class="text-xs opacity-60">Manzana verde ácida helada.</p></div>
+        <div class="card-shisha" data-name="Eskimo P'App"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Revoshi</span><h3 class="text-xl font-bold">Eskimo P'App</h3><p class="text-xs opacity-60">Piña helada.</p></div>
         <div class="card-shisha" data-name="Clipporiz"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Clipporiz</h3><p class="text-xs opacity-60">Mix de frutos del bosque glaciares.</p></div>
         <div class="card-shisha" data-name="Big Boy"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Al Waha</span><h3 class="text-xl font-bold">Big Boy</h3><p class="text-xs opacity-60">Sandía dulce con menta fresca.</p></div>
         <div class="card-shisha" data-name="Huracán"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Huracán</h3><p class="text-xs opacity-60">Mezcla cítrica ultra refrescante.</p></div>
@@ -258,7 +273,7 @@
     </div>
     <div class="flex flex-col w-full max-w-md">
         <div class="card-shisha" data-name="Bubblenciaga"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">Bubblenciaga</h3><p class="text-xs opacity-60">Chicle de fresa intenso.</p></div>
-        <div class="card-shisha" data-name="Chari Zkittlez"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">Chari Zkittlez</h3><p class="text-xs opacity-60">Caramelos masticables de cereza.</p></div>
+        <div class="card-shisha" data-name="Chari Zkittlez"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Hookain</span><h3 class="text-xl font-bold">Chari Zkittlez</h3><p class="text-xs opacity-60">Caramelos de cereza.</p></div>
     </div>
 </div>
 
@@ -270,9 +285,9 @@
         <div class="h-[1px] w-20 bg-gold/30 mx-auto mt-4"></div>
     </div>
     <div class="flex flex-col w-full max-w-md">
-        <div class="card-shisha" data-name="Magic Love"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Al Fakher</span><h3 class="text-xl font-bold">Magic Love</h3><p class="text-xs opacity-60">Pasión floral con un toque de menta.</p></div>
+        <div class="card-shisha" data-name="Magic Love"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Al Fakher</span><h3 class="text-xl font-bold">Magic Love</h3><p class="text-xs opacity-60">Fruta de la pasión, melón, especias suaves y Menta.</p></div>
         <div class="card-shisha" data-name="Vampiro"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag leaf-black">NEGRO</span><span class="brand-tag">Dozaj</span><h3 class="text-xl font-bold">Vampiro</h3><p class="text-xs opacity-60">Cereza negra intensa.</p></div>
-        <div class="card-shisha" data-name="Trópido"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Trópido</h3><p class="text-xs opacity-60">Fruta exótica y fondo botánico.</p></div>
+        <div class="card-shisha" data-name="Trópido"><div class="sold-out-badge">SOLD OUT</div><span class="leaf-tag">RUBIO</span><span class="brand-tag">Anda</span><h3 class="text-xl font-bold">Trópido</h3><p class="text-xs opacity-60">Maracuya, mango y menta.</p></div>
     </div>
 </div>
 
